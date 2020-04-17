@@ -27,6 +27,12 @@ class App extends React.Component {
     return `${minutes}:${seconds}`
   }
 
+  playBell = () => {
+    const bell = new Audio('./sounds/bell.wav');
+    bell.play();
+  };
+
+
   step = () => {
     this.setState({
       time: this.state.time - 1,
@@ -47,7 +53,7 @@ class App extends React.Component {
 
     }
     if (this.state.time === 0) {
-      this.playBell
+      this.playBell()
       return changeStatus(this.state.status)
     }
   };
@@ -56,7 +62,7 @@ class App extends React.Component {
 
     this.setState({
       status: 'work',
-      time: 12,
+      time: 1200,
       timer: setInterval(this.step, 1000),
     });
 
@@ -75,10 +81,6 @@ class App extends React.Component {
     window.close();
   };
 
-  playBell = () => {
-    const bell = new Audio('./sounds/bell.wav');
-    bell.play();
-  };
 
   render() {
     const { status, time } = this.state;
