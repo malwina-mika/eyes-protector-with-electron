@@ -6,19 +6,51 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      status: 'rest',
-      time: 122,
+      status: 'off',
+      time: 20,
       timer: null
     }
   }
+  step = () => {
+    this.setState({
+      time: this.state.time - 1,
+    })
 
+    const changeStatus = status => {
+      if (status === 'work') {
+        this.setState({
+          status: 'rest',
+          time: 20,
+        })
+      } if (status === 'rest') {
+        this.setState({
+          status: 'work',
+          time: 1200,
+        })
+      }
+
+    }
+    if (this.state.time === 0) {
+      return changeStatus(this.state.status)
+    }
+  };
+
+  startTimer = () => {
+
+    this.setState({
+      status: 'work',
+      time: 1200,
+      timer: setInterval(this.step, 1000),
+    });
+
+  };
   render() {
     const { status, time } = this.state;
 
     const formatTime = givenTime => {
 
       const addZero = value => {
-        if (value >= 10) {
+        if (value < 10) {
           return '0' + value
         } else {
           return value
@@ -42,7 +74,7 @@ class App extends React.Component {
         {(status === 'work') && <img src="./images/work.png" />}
         {(status === 'rest') && <img src="./images/rest.png" />}
         {(status !== 'off') && <div className="timer">{formatTime(time)}</div>}
-        {(status === 'off') && <button className="btn">Start</button>}
+        {(status === 'off') && <button className="btn" onClick={this.startTimer}>Start</button>}
         {(status !== 'off') && <button className="btn">Stop</button>}
         <button className="btn btn-close">X</button>
       </div>
