@@ -11,6 +11,22 @@ class App extends React.Component {
       timer: null
     }
   }
+
+  formatTime = givenTime => {
+
+    const addZero = value => {
+      if (value < 10) {
+        return '0' + value
+      } else {
+        return value
+      }
+    }
+    const seconds = addZero(givenTime % 60);
+    const minutes = addZero(Math.floor(givenTime / 60))
+
+    return `${minutes}:${seconds}`
+  }
+
   step = () => {
     this.setState({
       time: this.state.time - 1,
@@ -44,23 +60,22 @@ class App extends React.Component {
     });
 
   };
+
+  stopTimer = () => {
+    this.setState({
+      status: 'off',
+      time: 0,
+      timer: clearInterval(this.state.timer),
+    });
+
+  }
+
+  closeApp = () => {
+    window.close();
+  };
+
   render() {
     const { status, time } = this.state;
-
-    const formatTime = givenTime => {
-
-      const addZero = value => {
-        if (value < 10) {
-          return '0' + value
-        } else {
-          return value
-        }
-      }
-      const seconds = addZero(givenTime % 60);
-      const minutes = addZero(Math.floor(givenTime / 60))
-
-      return `${minutes}:${seconds}`
-    }
 
     return (
       <div>
@@ -73,10 +88,10 @@ class App extends React.Component {
         }
         {(status === 'work') && <img src="./images/work.png" />}
         {(status === 'rest') && <img src="./images/rest.png" />}
-        {(status !== 'off') && <div className="timer">{formatTime(time)}</div>}
+        {(status !== 'off') && <div className="timer">{this.formatTime(time)}</div>}
         {(status === 'off') && <button className="btn" onClick={this.startTimer}>Start</button>}
-        {(status !== 'off') && <button className="btn">Stop</button>}
-        <button className="btn btn-close">X</button>
+        {(status !== 'off') && <button className="btn" onClick={this.stopTimer}>Stop</button>}
+        <button className="btn btn-close" onClick={this.closeApp}>X</button>
       </div>
     )
   }
